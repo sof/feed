@@ -13,7 +13,6 @@
 module Text.RSS1.Utils where
 
 import Text.XML.Light      as XML
-import Text.XML.Light.Proc as XML
 import Text.DublinCore.Types
 
 import Data.Maybe (listToMaybe, mapMaybe)
@@ -94,11 +93,11 @@ known_con_elts :: [QName]
 known_con_elts = map (qualName (conNS,conPrefix)) [ "items", "item", "format", "encoding" ]
 
 removeKnownElts :: XML.Element -> [XML.Element]
-removeKnownElts e = 
+removeKnownElts e =
   filter (\ e1 -> not (elName e1 `elem` known_elts)) (children e)
  where
-  known_elts = 
-    concat [ known_rss_elts 
+  known_elts =
+    concat [ known_rss_elts
            , known_syn_elts
 	   , known_dc_elts
 	   , known_con_elts
@@ -106,9 +105,8 @@ removeKnownElts e =
 	   ]
 
 removeKnownAttrs :: XML.Element -> [XML.Attr]
-removeKnownAttrs e = 
+removeKnownAttrs e =
   filter (\ a -> not (attrKey a `elem` known_attrs)) (elAttribs e)
  where
-  known_attrs = 
+  known_attrs =
      map rdfName [ "about" ]
-

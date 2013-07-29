@@ -16,9 +16,6 @@ module Text.Atom.Feed.Export where
 import Text.XML.Light as XML
 import Text.Atom.Feed
 
-import Data.List
-import Data.Maybe
-
 atom_prefix :: Maybe String
 atom_prefix = Nothing -- Just "atom"
 
@@ -178,7 +175,7 @@ xmlLink l = (atomNode "link" (map Elem (linkOther l)))
               }
 
 xmlSource :: Source -> Element
-xmlSource s = atomNode "source" 
+xmlSource s = atomNode "source"
             $ map Elem
             $ sourceOther s
            ++ map xmlAuthor (sourceAuthors s)
@@ -215,9 +212,9 @@ xmlPerson p = map Elem $
            ++ personOther p
 
 xmlInReplyTo :: InReplyTo -> XML.Element
-xmlInReplyTo irt = 
+xmlInReplyTo irt =
      (atomThreadNode "in-reply-to" (replyToContent irt))
-		 { elAttribs = 
+		 { elAttribs =
 		       mb (atomThreadAttr "ref")  (Just $ replyToRef irt)
 		    ++ mb (atomThreadAttr "href") (replyToHRef irt)
 		    ++ mb (atomThreadAttr "type") (replyToType irt)
@@ -226,7 +223,7 @@ xmlInReplyTo irt =
 		 }
 
 xmlInReplyTotal :: InReplyTotal -> XML.Element
-xmlInReplyTotal irt = 
+xmlInReplyTotal irt =
      (atomThreadLeaf "total" (show $ replyToTotal irt))
 		 { elAttribs = replyToTotalOther irt }
 
@@ -269,4 +266,3 @@ xmlTextContent tg t =
 mb :: (a -> b) -> Maybe a -> [b]
 mb _ Nothing = []
 mb f (Just x) = [f x]
-

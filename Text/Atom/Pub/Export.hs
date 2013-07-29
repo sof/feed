@@ -13,12 +13,10 @@ module Text.Atom.Pub.Export where
 
 import Text.XML.Light
 import Text.Atom.Pub
-import Text.Atom.Feed.Export 
+import Text.Atom.Feed.Export
        ( mb, xmlCategory, xmlTitle
        , xmlns_atom
        )
-
-import Data.Maybe
 
 showServiceDoc :: Service -> String
 showServiceDoc s = showElement (xmlService s)
@@ -47,15 +45,15 @@ appName :: String -> QName
 appName nc = (mkQName (Just "app") nc){qURI=Just appNS}
 
 xmlService :: Service -> Element
-xmlService s = 
+xmlService s =
   mkElem (appName "service") [xmlns_app,xmlns_atom]
          (concat [ map xmlWorkspace (serviceWorkspaces s)
 	         , serviceOther s
 		 ])
 
 xmlWorkspace :: Workspace -> Element
-xmlWorkspace w = 
-  mkElem (appName "workspace") 
+xmlWorkspace w =
+  mkElem (appName "workspace")
          [mkAttr "xml:lang" "en"]
 	 (concat [ [xmlTitle (workspaceTitle w)]
 	         , map xmlCollection (workspaceCols w)
@@ -71,11 +69,11 @@ xmlCollection c =
 		 , map xmlCategories (collectionCats c)
 		 , collectionOther c
 		 ])
-		 
+
 xmlCategories :: Categories -> Element
-xmlCategories (CategoriesExternal u) = 
+xmlCategories (CategoriesExternal u) =
   mkElem (appName "categories") [mkAttr "href" u] []
-xmlCategories (Categories mbFixed mbScheme cs) = 
+xmlCategories (Categories mbFixed mbScheme cs) =
   mkElem (appName "categories")
          (concat [ mb (\ f -> mkAttr "fixed"  (if f then "yes" else "no")) mbFixed
 	         , mb (mkAttr "scheme") mbScheme

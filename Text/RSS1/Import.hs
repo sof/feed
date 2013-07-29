@@ -1,6 +1,6 @@
 --------------------------------------------------------------------
 -- |
--- Module    : Text.RSS1.Import 
+-- Module    : Text.RSS1.Import
 -- Copyright : (c) Galois, Inc. 2008
 -- License   : BSD3
 --
@@ -10,14 +10,13 @@
 --
 --------------------------------------------------------------------
 
-module Text.RSS1.Import 
+module Text.RSS1.Import
        ( elementToFeed
        ) where
 
 import Text.RSS1.Syntax
 import Text.RSS1.Utils
 import Text.XML.Light      as XML
-import Text.XML.Light.Proc as XML
 import Text.DublinCore.Types
 
 import Data.Maybe (mapMaybe, fromMaybe)
@@ -123,7 +122,7 @@ elementToChannel e = do
   li  <- pLeaf "link"  e
   de  <- pLeaf "description" e
   let mbImg = pLeaf "image" e
-  let is = 
+  let is =
        case fmap seqLeaves $ pNode "items" e of
          Nothing -> []
 	 Just ss -> ss
@@ -133,7 +132,7 @@ elementToChannel e = do
   let cs  = mapMaybe elementToContent es
   let es_other = removeKnownElts e
   let as_other = removeKnownAttrs e
-  let def_chan = 
+  let def_chan =
         Channel
 	  { channelURI          = uri
           , channelTitle        = ti
@@ -154,13 +153,13 @@ elementToChannel e = do
   return (addSyndication e def_chan)
 
 addSyndication :: XML.Element -> Channel -> Channel
-addSyndication e ch = 
+addSyndication e ch =
   ch{ channelUpdatePeriod = fmap toUpdatePeriod $ pQLeaf (synNS,synPrefix) "updatePeriod" e
     , channelUpdateFreq   = fmap read $ pQLeaf (synNS,synPrefix) "updateFrequency" e
     , channelUpdateBase   = pQLeaf (synNS,synPrefix) "updateBase" e
     }
  where
-  toUpdatePeriod x = 
+  toUpdatePeriod x =
     case x of
       "hourly"  -> Update_Hourly
       "daily"   -> Update_Daily
@@ -169,7 +168,7 @@ addSyndication e ch =
       "yearly"  -> Update_Yearly
       _         -> Update_Hourly -- ToDo: whine
 
-  
+
 elementToDC :: XML.Element -> Maybe DCItem
 elementToDC e = do
   guard (qURI (elName e) == dcNS)
@@ -220,18 +219,18 @@ elementToContent e = do
     }
 
 bagLeaves :: XML.Element -> [URIString]
-bagLeaves be = 
-  mapMaybe 
+bagLeaves be =
+  mapMaybe
     (\ e -> do
       guard (elName e == qualName (rdfNS,rdfPrefix) "li")
-      pAttr (rdfNS,rdfPrefix) "resource" e `mplus` 
+      pAttr (rdfNS,rdfPrefix) "resource" e `mplus`
         fmap strContent (pQNode (qualName (rdfNS,rdfPrefix) "li") e))
     (fromMaybe [] $ fmap children $ pQNode (qualName (rdfNS,rdfPrefix) "Bag") be)
 
 {-
 bagElements :: XML.Element -> [XML.Element]
-bagElements be = 
-  mapMaybe 
+bagElements be =
+  mapMaybe
     (\ e -> do
       guard (elName e == rdfName "li")
       return e)
@@ -239,8 +238,8 @@ bagElements be =
 -}
 
 seqLeaves :: XML.Element -> [URIString]
-seqLeaves se = 
-  mapMaybe 
+seqLeaves se =
+  mapMaybe
     (\ e -> do
       guard (elName e == rdfName "li")
       return (strContent e))
