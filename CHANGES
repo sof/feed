@@ -1,0 +1,4 @@
+Version 0.3.7:
+
+ * <feed> parsing: made <title> be optional.
+ * <entry> parsing: try <published> if <updated> is missing.
