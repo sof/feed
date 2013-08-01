@@ -1,5 +1,5 @@
 Name:               feed
-Version:            0.3.9
+Version:            0.3.9.1
 License:            BSD3
 License-file:       LICENSE
 Category:           Text
@@ -7,13 +7,10 @@ Synopsis:           Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.
 Description:        Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.
 Author:             Sigbjorn Finne <sof@forkIO.com>
 Maintainer:         Sigbjorn Finne <sof@forkIO.com>
+Homepage:           https://github.com/sof/feed
 Extra-Source-Files: tests/Main.hs tests/rss20.xml CHANGES
 Cabal-version:   >= 1.2
 build-type: Simple
-
-flag new-base
-  description: Build with new smaller base library
-  default: False
 
 library
     Exposed-Modules: Text.RSS.Syntax

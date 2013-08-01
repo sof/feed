@@ -1,3 +1,7 @@
+Version 0.3.9.1:
+
+ * add ref to github repo + .cabal tidying.
+
 Version 0.3.9:
 
  * tidy up compilation with ghc-7.6(.3), bumped version
