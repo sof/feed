@@ -26,6 +26,7 @@ import Text.RSS1.Import      as RSS1
 
 import Text.Feed.Types
 import Text.XML.Light as XML
+import Text.XML.Light.Lexer ( XmlSource )
 
 import Control.Monad
 
@@ -40,19 +41,27 @@ parseFeedFromFile fp = do
     Nothing -> fail ("parseFeedFromFile: not a well-formed XML content in: " ++ fp)
     Just f  -> return f
 
+-- | 'parseFeedWithParser tries to parse the string @str@
+-- as one of the feed formats. First as Atom, then RSS2 before 
+-- giving RSS1 a try. @Nothing@ is, rather unhelpfully, returned 
+-- as an indication of error.
+parseFeedWithParser :: XmlSource s => (s -> Maybe Element) -> s -> Maybe Feed
+parseFeedWithParser parser str = 
+  case parser str of
+    Nothing -> Nothing
+    Just e -> 
+      readAtom e `mplus`
+      readRSS2 e `mplus`
+      readRSS1 e `mplus`
+      Just (XMLFeed e)
+      
+
 -- | 'parseFeedString str' tries to parse the string @str@ as 
 -- one of the feed formats. First as Atom, then RSS2 before
 -- giving RSS1 a try. @Nothing@ is, rather unhelpfully, returned
 -- as an indication of error.
 parseFeedString :: String -> Maybe Feed
-parseFeedString str =
-  case parseXMLDoc str of
-    Nothing -> Nothing
-    Just e  ->
-      readAtom e `mplus`
-      readRSS2 e `mplus`
-      readRSS1 e `mplus`
-      Just (XMLFeed e)
+parseFeedString = parseFeedWithParser parseXMLDoc
 
 -- | 'readRSS2 elt' tries to derive an RSS2.x, RSS-0.9x feed document
 -- from the XML element @e@.
