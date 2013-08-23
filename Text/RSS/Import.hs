@@ -59,7 +59,7 @@ elementToRSS e = do
   let es = children e
   let as = elAttribs e
   v  <- pAttr "version" e
-  ch <- pNode "channel" es >>= elementToChannel 
+  ch <- pNode "channel" es >>= elementToChannel
   return RSS
     { rssVersion = v
     , rssAttrs   = filter (\ a -> not (qName (attrKey a) `elem` known_attrs)) as
@@ -205,11 +205,10 @@ elementToEnclosure e = do
   let as = elAttribs e
   url <- pAttr "url" e
   ty  <- pAttr "type" e
-  len <- pAttr "length" e >>= readInt
   return RSSEnclosure
     { rssEnclosureURL = url
     , rssEnclosureType = ty
-    , rssEnclosureLength = len
+    , rssEnclosureLength = pAttr "length" e >>= readInt
     , rssEnclosureAttrs = filter (\ a -> not (qName (attrKey a) `elem` known_attrs)) as
     }
  where
@@ -262,13 +261,13 @@ elementToSkipDays e = do
 ----
 
 readInt :: String -> Maybe Integer
-readInt s = 
+readInt s =
   case reads s of
     ((x,_):_) -> Just x
     _ -> Nothing
 
 readBool :: String -> Maybe Bool
-readBool s = 
+readBool s =
   case dropWhile isSpace s of
     't':'r':'u':'e':_ -> Just True
     'f':'a':'l':'s':'e':_ -> Just False

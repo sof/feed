@@ -32,7 +32,7 @@ data RSS
 
 type URLString  = String
 -- | RFC 822 conforming.
-type DateString = String 
+type DateString = String
 
 data RSSChannel
  = RSSChannel
@@ -88,7 +88,7 @@ data RSSSource
 data RSSEnclosure
  = RSSEnclosure
      { rssEnclosureURL     :: URLString
-     , rssEnclosureLength  :: Integer
+     , rssEnclosureLength  :: Maybe Integer
      , rssEnclosureType    :: String
      , rssEnclosureAttrs   :: [XML.Attr]
      }
@@ -150,8 +150,8 @@ data RSSTextInput
 nullRSS :: String -- ^channel title
         -> URLString -- ^channel link
         -> RSS
-nullRSS title link = 
-  RSS 
+nullRSS title link =
+  RSS
     { rssVersion = "2.0"
     , rssAttrs   = []
     , rssChannel = nullChannel title link
@@ -161,7 +161,7 @@ nullRSS title link =
 nullChannel :: String -- ^rssTitle
             -> URLString -- ^rssLink
             -> RSSChannel
-nullChannel title link = 
+nullChannel title link =
   RSSChannel
      { rssTitle        = title
      , rssLink         = link
@@ -188,7 +188,7 @@ nullChannel title link =
 
 nullItem :: String -- ^title
          -> RSSItem
-nullItem title = 
+nullItem title =
    RSSItem
      { rssItemTitle        = Just title
      , rssItemLink         = Nothing
@@ -207,28 +207,28 @@ nullItem title =
 nullSource :: URLString -- ^source URL
            -> String    -- ^title
            -> RSSSource
-nullSource url title = 
+nullSource url title =
   RSSSource
      { rssSourceURL    = url
      , rssSourceAttrs  = []
      , rssSourceTitle  = title
      }
 
-nullEnclosure :: URLString -- ^enclosure URL
-              -> Integer   -- ^enclosure length
-              -> String    -- ^enclosure type
+nullEnclosure :: URLString     -- ^enclosure URL
+              -> Maybe Integer -- ^enclosure length
+              -> String        -- ^enclosure type
               -> RSSEnclosure
-nullEnclosure url len ty = 
+nullEnclosure url mb_len ty =
   RSSEnclosure
      { rssEnclosureURL     = url
-     , rssEnclosureLength  = len
+     , rssEnclosureLength  = mb_len
      , rssEnclosureType    = ty
      , rssEnclosureAttrs   = []
      }
 
 newCategory :: String  -- ^category Value
             -> RSSCategory
-newCategory nm = 
+newCategory nm =
   RSSCategory
      { rssCategoryDomain   = Nothing
      , rssCategoryAttrs    = []
@@ -237,7 +237,7 @@ newCategory nm =
 
 nullGuid :: String -- ^guid value
          -> RSSGuid
-nullGuid v = 
+nullGuid v =
   RSSGuid
      { rssGuidPermanentURL = Nothing
      , rssGuidAttrs        = []
@@ -252,7 +252,7 @@ nullImage :: URLString -- ^imageURL
           -> String    -- ^imageTitle
           -> URLString -- ^imageLink
           -> RSSImage
-nullImage url title link = 
+nullImage url title link =
   RSSImage
      { rssImageURL     = url
      , rssImageTitle   = title
@@ -264,7 +264,7 @@ nullImage url title link =
      }
 
 nullCloud :: RSSCloud
-nullCloud = 
+nullCloud =
   RSSCloud
      { rssCloudDomain   = Nothing
      , rssCloudPort     = Nothing
@@ -278,7 +278,7 @@ nullTextInput :: String    -- ^inputTitle
               -> String    -- ^inputName
               -> URLString -- ^inputLink
               -> RSSTextInput
-nullTextInput title nm link = 
+nullTextInput title nm link =
   RSSTextInput
      { rssTextInputTitle = title
      , rssTextInputDesc  = title
