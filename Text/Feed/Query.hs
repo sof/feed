@@ -74,7 +74,7 @@ getFeedItems = Text.Feed.Query.feedItems
 
 type FeedGetter a = Feed.Feed -> Maybe a
 
-getFeedAuthor       :: Feed.Feed -> (Maybe String)
+getFeedAuthor       :: FeedGetter String
 getFeedAuthor ft =
   case ft of
     Feed.AtomFeed f -> case Atom.feedAuthors f of { [] -> Nothing; (x:_) -> Just (Atom.personName x)}
