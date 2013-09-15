@@ -32,7 +32,8 @@ module Text.Feed.Query
        , ItemGetter               -- type _ a = Item -> Maybe a
        , getItemTitle             -- :: ItemGetter (String)
        , getItemLink              -- :: ItemGetter (String)
-       , getItemPublishDate       -- :: ItemGetter (DateString)
+       , getItemPublishDate       -- :: Data.Time.ParseTime t => ItemGetter (Maybe t)
+       , getItemPublishDateString -- :: ItemGetter (DateString)
        , getItemDate              -- :: ItemGetter (DateString)
        , getItemAuthor            -- :: ItemGetter (String)
        , getItemCommentLink       -- :: ItemGetter (URLString)
@@ -58,6 +59,10 @@ import Text.DublinCore.Types
 import Data.List
 import Data.Maybe
 --import Debug.Trace
+
+-- for getItemPublishDate rfc822 date parsing.
+import System.Locale (rfc822DateFormat, defaultTimeLocale)
+import Data.Time.Format ( ParseTime, parseTime )
 
 feedItems :: Feed.Feed -> [Feed.Item]
 feedItems fe =
@@ -248,8 +253,21 @@ getItemLink it =
   isHTMLType _ = True -- if none given, assume html.
 
 
-getItemPublishDate :: ItemGetter DateString
-getItemPublishDate it =
+-- | 'getItemPublishDate item' returns the publication date of the item,
+-- but first parsed as per RFC-822. If the date string cannot be parsed
+-- as such, Just Nothing is returned. The caller must then instead
+-- fall back to using the date string from 'getItemPublishDateString'.
+--
+-- The parsed date representation is one of the ParseTime instances;
+-- see 'Data.Time.Format'.
+getItemPublishDate :: ParseTime t => ItemGetter (Maybe t)
+getItemPublishDate it = do
+   ds <- getItemPublishDateString it
+   return $ parseTime defaultTimeLocale rfc822DateFormat ds
+
+
+getItemPublishDateString :: ItemGetter DateString
+getItemPublishDateString it =
   case it of
     Feed.AtomItem i -> Just $ Atom.entryUpdated i
     Feed.RSSItem i  -> RSS.rssItemPubDate i
@@ -260,7 +278,7 @@ getItemPublishDate it =
   isDate dc  = dcElt dc == DC_Date
 
 getItemDate :: ItemGetter DateString
-getItemDate it = getItemPublishDate it
+getItemDate it = getItemPublishDateString it
 
 getItemAuthor      :: ItemGetter String
 getItemAuthor it =
