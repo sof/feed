@@ -40,5 +40,6 @@ library
                      old-locale >= 1,
                      old-time   >= 1,
                      xml >= 1.2.6,
-                     utf8-string
+                     utf8-string,
+                     time
 
