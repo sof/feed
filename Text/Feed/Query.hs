@@ -56,12 +56,12 @@ import Text.XML.Light as XML
 
 import Text.DublinCore.Types
 
+import Control.Monad ( mplus )
 import Data.List
 import Data.Maybe
---import Debug.Trace
 
 -- for getItemPublishDate rfc822 date parsing.
-import System.Locale (rfc822DateFormat, defaultTimeLocale)
+import System.Locale ( rfc822DateFormat, iso8601DateFormat, defaultTimeLocale )
 import Data.Time.Format ( ParseTime, parseTime )
 
 feedItems :: Feed.Feed -> [Feed.Item]
@@ -254,17 +254,25 @@ getItemLink it =
 
 
 -- | 'getItemPublishDate item' returns the publication date of the item,
--- but first parsed as per RFC-822. If the date string cannot be parsed
--- as such, Just Nothing is returned. The caller must then instead
--- fall back to using the date string from 'getItemPublishDateString'.
+-- but first parsed per the supported RFC 822 and RFC 3339 formats.
+--
+-- If the date string cannot be parsed as such, Just Nothing is
+-- returned.  The caller must then instead fall back to processing the
+-- date string from 'getItemPublishDateString'.
 --
 -- The parsed date representation is one of the ParseTime instances;
 -- see 'Data.Time.Format'.
 getItemPublishDate :: ParseTime t => ItemGetter (Maybe t)
 getItemPublishDate it = do
    ds <- getItemPublishDateString it
-   return $ parseTime defaultTimeLocale rfc822DateFormat ds
+   let
+     rfc3339DateFormat1 = iso8601DateFormat (Just "%H:%M:%S%Z")
+     rfc3339DateFormat2 = iso8601DateFormat (Just "%H:%M:%S%Q%Z")
 
+     formats = [ rfc3339DateFormat1, rfc3339DateFormat2, rfc822DateFormat ]
+
+     date = foldl1 mplus (map (\ fmt -> parseTime defaultTimeLocale fmt ds) formats)
+   return date
 
 getItemPublishDateString :: ItemGetter DateString
 getItemPublishDateString it =
