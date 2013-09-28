@@ -16,7 +16,7 @@ import Text.RSS.Syntax
 import Text.RSS1.Utils ( dcNS, dcPrefix )
 import Text.XML.Light as XML
 
-import Data.Maybe (listToMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, listToMaybe, mapMaybe)
 import Data.Char  (isSpace )
 import Control.Monad (guard,mplus)
 
@@ -75,11 +75,11 @@ elementToChannel e = do
   let es = children e
   title <- pLeaf "title" es
   link  <- pLeaf "link"  es
-  desc  <- pLeaf "description" es
   return RSSChannel
      { rssTitle = title
      , rssLink  = link
-     , rssDescription = desc
+        -- being liberal, <description/> is a required channel element.
+     , rssDescription = fromMaybe title (pLeaf "description" es)
      , rssItems = pMany "item" elementToItem es
      , rssLanguage   = pLeaf "language" es `mplus` pQLeaf (dcName "lang") es
      , rssCopyright  = pLeaf "copyright" es
