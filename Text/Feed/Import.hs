@@ -13,7 +13,7 @@
 module Text.Feed.Import
         ( parseFeedFromFile -- :: FilePath -> IO Feed
         , parseFeedString   -- :: String -> IO Feed
-	
+
           -- if you know your format, use these directly:
 	, readRSS2          -- :: XML.Element -> Maybe Feed
 	, readRSS1          -- :: XML.Element -> Maybe Feed
@@ -30,7 +30,7 @@ import Text.XML.Light.Lexer ( XmlSource )
 
 import Control.Monad
 
-import System.IO.UTF8 as UTF8 ( readFile ) 
+import System.IO.UTF8 as UTF8 ( readFile )
 
 -- | 'parseFeedFromFile fp' reads in the contents of the file at @fp@;
 -- the assumed encoding is UTF-8.
@@ -42,21 +42,21 @@ parseFeedFromFile fp = do
     Just f  -> return f
 
 -- | 'parseFeedWithParser tries to parse the string @str@
--- as one of the feed formats. First as Atom, then RSS2 before 
--- giving RSS1 a try. @Nothing@ is, rather unhelpfully, returned 
+-- as one of the feed formats. First as Atom, then RSS2 before
+-- giving RSS1 a try. @Nothing@ is, rather unhelpfully, returned
 -- as an indication of error.
 parseFeedWithParser :: XmlSource s => (s -> Maybe Element) -> s -> Maybe Feed
-parseFeedWithParser parser str = 
+parseFeedWithParser parser str =
   case parser str of
     Nothing -> Nothing
-    Just e -> 
+    Just e ->
       readAtom e `mplus`
       readRSS2 e `mplus`
       readRSS1 e `mplus`
       Just (XMLFeed e)
-      
 
--- | 'parseFeedString str' tries to parse the string @str@ as 
+
+-- | 'parseFeedString str' tries to parse the string @str@ as
 -- one of the feed formats. First as Atom, then RSS2 before
 -- giving RSS1 a try. @Nothing@ is, rather unhelpfully, returned
 -- as an indication of error.

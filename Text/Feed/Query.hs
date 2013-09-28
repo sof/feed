@@ -309,11 +309,7 @@ getItemEnclosure it =
        case filter isEnc $ Atom.entryLinks e of
          (l:_) -> Just (Atom.linkHref l,
                         Atom.linkType l,
-                        do
-                         len <- Atom.linkLength l
-                         case reads len of
-                           [] -> fail ""
-                           ((v,_):_) -> return v)
+			readLength (Atom.linkLength l))
          _ -> Nothing
     Feed.RSSItem i  ->
        fmap (\ e -> (RSS.rssEnclosureURL e, Just (RSS.rssEnclosureType e), RSS.rssEnclosureLength e))
@@ -322,14 +318,21 @@ getItemEnclosure it =
        case RSS1.itemContent i of
          [] -> Nothing
          (c:_) -> Just (fromMaybe "" (RSS1.contentURI c), RSS1.contentFormat c, Nothing)
-    Feed.XMLItem e  -> fmap toV (findElement (unqual "enclosure") e)
+    Feed.XMLItem e  -> fmap xmlToEnclosure (findElement (unqual "enclosure") e)
  where
    isEnc lr = toStr (Atom.linkRel lr) == "enclosure"
 
-   toV e = ( fromMaybe "" (fmap XML.strContent (findElement (unqual "url") e))
-           , fmap XML.strContent (findElement (unqual "type") e)
-           , fmap (read . XML.strContent) (findElement (unqual "length") e)
-           )
+   readLength Nothing = Nothing
+   readLength (Just str) =
+     case reads str of
+       [] -> Nothing
+       ((v,_):_) -> Just v
+
+   xmlToEnclosure e =
+     ( fromMaybe "" (findAttr (unqual "url") e)
+     , findAttr (unqual "type") e
+     , readLength $ findAttr (unqual "length") e
+     )
 
 getItemFeedLink    :: ItemGetter URLString
 getItemFeedLink it =
