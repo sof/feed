@@ -1,12 +1,13 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.Feed.Query
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Portability:
+-- Portability: portable
 --
 --------------------------------------------------------------------
 
@@ -288,6 +289,7 @@ getItemPublishDateString it =
 getItemDate :: ItemGetter DateString
 getItemDate it = getItemPublishDateString it
 
+-- | 'getItemAuthor f' returns the optional author of the item.
 getItemAuthor      :: ItemGetter String
 getItemAuthor it =
   case it of

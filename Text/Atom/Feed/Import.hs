@@ -1,12 +1,16 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.Atom.Feed.Import
--- Copyright : (c) Galois, Inc. 2007-2008
+-- Copyright : (c) Galois, Inc. 2007-2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
+-- Portability:: portable
 -- Description: Convert from XML to Atom
+--
+-- Convert from XML to Atom
 --
 --------------------------------------------------------------------
 
@@ -214,7 +218,7 @@ pEntry e =
 
     -- let's have them all (including xml:base and xml:lang + xmlns: stuff)
    known_attrs = []
-   
+
 pContent :: XML.Element -> Maybe EntryContent
 pContent e =
   case pAttr "type" e of
@@ -247,7 +251,7 @@ pInReplyTo :: [XML.Element] -> Maybe InReplyTo
 pInReplyTo es = do
  t <- pQNode (atomThreadName "reply-to") es
  case pQAttr (atomThreadName "ref") t of
-   Just ref -> 
+   Just ref ->
      return InReplyTo
        { replyToRef     = ref
        , replyToHRef    = pQAttr (atomThreadName "href") t

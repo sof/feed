@@ -1,10 +1,16 @@
 Name:               feed
-Version:            0.3.9.1
+Version:            0.3.9.2
 License:            BSD3
 License-file:       LICENSE
 Category:           Text
 Synopsis:           Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.
 Description:        Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.
+                    .
+                    To help working with the multiple feed formats we've
+                    ended up with, this set of modules provides parsers,
+                    pretty printers and some utility code for querying
+                    and just generally working with a concrete representation
+                    of feeds in Haskell.
 Author:             Sigbjorn Finne <sof@forkIO.com>
 Maintainer:         Sigbjorn Finne <sof@forkIO.com>
 Homepage:           https://github.com/sof/feed

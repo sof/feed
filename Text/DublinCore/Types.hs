@@ -1,17 +1,20 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.DublinCore.Types
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Description: Representing the DublinCore metadata elements in Haskell. The Dublin
--- Core Metadata Element Set. See: <http://dublincore.org/>
--- 
+--
+-- Representing the DublinCore metadata elements in Haskell.
+-- For information on the Dublin Core Metadata Element Set,
+-- see: <http://dublincore.org/>
+--
 module Text.DublinCore.Types where
 
--- | A DCItem
+-- | A DCItem pairs a specific element with its (string) value.
 data DCItem
  = DCItem
      { dcElt  :: DCInfo

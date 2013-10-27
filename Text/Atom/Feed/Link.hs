@@ -1,12 +1,13 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.Atom.Feed.Link
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Portability:
+-- Portability: portable
 --
 --------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ module Text.Atom.Feed.Link
 -- The Atom standard encourages that such typed links to
 -- be registered with IANA if they have wider applicability,
 -- and the 'LinkRelation' data type encodes the currently
--- registered link types (derived from: 
+-- registered link types (derived from:
 --  http:\/\/www.iana.org\/assignments\/link-relations.html
 -- on 2007-10-28]
 --
@@ -51,7 +52,7 @@ data LinkRelation               -- relevant RFC:
      deriving (Eq, Show)
 
 showLinkRelation :: LinkRelation -> String
-showLinkRelation lr = 
+showLinkRelation lr =
   case lr of
    LinkAlternate   -> "alternate"
    LinkCurrent     -> "current"

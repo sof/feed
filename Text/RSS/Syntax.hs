@@ -1,13 +1,16 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.RSS.Syntax
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Description: The basic syntax for putting together feeds.  For instance,
--- to create a feed with a single item item:
+--
+-- The basic syntax for putting together feeds.
+--
+-- For instance, to create a feed with a single item item:
 --  (nullRSS \"rss title\" \"link\") {rssChannel=(nullChannel \"channel title\" \"link\") {rssItems=[(nullItem \"item title\")]}}
 
 --------------------------------------------------------------------

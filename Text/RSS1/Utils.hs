@@ -1,12 +1,13 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.RSS1.Utils
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Portability:
+-- Portability: portable
 --
 --------------------------------------------------------------------
 

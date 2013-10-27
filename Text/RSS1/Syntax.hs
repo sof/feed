@@ -1,12 +1,13 @@
 --------------------------------------------------------------------
 -- |
 -- Module    : Text.RSS1.Syntax
--- Copyright : (c) Galois, Inc. 2008
+-- Copyright : (c) Galois, Inc. 2008,
+--             (c) Sigbjorn Finne 2009-
 -- License   : BSD3
 --
--- Maintainer: Sigbjorn Finne <sof@galois.com>
+-- Maintainer: Sigbjorn Finne <sof@forkIO.com>
 -- Stability : provisional
--- Portability:
+-- Portability: portable
 --
 --------------------------------------------------------------------
 
@@ -106,7 +107,7 @@ data TaxonomyTopic
         deriving (Show)
 
 
-data UpdatePeriod 
+data UpdatePeriod
  = Update_Hourly
  | Update_Daily
  | Update_Weekly
@@ -125,7 +126,7 @@ data ContentInfo
 
 --default constructors:
 nullFeed :: URIString -> TitleString -> Feed
-nullFeed uri title = 
+nullFeed uri title =
    Feed { feedVersion   = "1.0"
         , feedChannel   = nullChannel uri title
         , feedImage     = Nothing
@@ -137,7 +138,7 @@ nullFeed uri title =
         }
 
 nullChannel :: URIString -> TitleString -> Channel
-nullChannel uri title = 
+nullChannel uri title =
    Channel
         { channelURI          = uri
         , channelTitle        = title
@@ -157,7 +158,7 @@ nullChannel uri title =
         }
 
 nullImage :: URIString -> String -> URIString -> Image
-nullImage imguri title link = 
+nullImage imguri title link =
   Image
         { imageURI    = imguri
         , imageTitle  = title
@@ -169,7 +170,7 @@ nullImage imguri title link =
         }
 
 nullItem :: URIString -> TextString -> URIString -> Item
-nullItem uri title link = 
+nullItem uri title link =
   Item
         { itemURI     = uri
         , itemTitle   = title
@@ -196,7 +197,7 @@ nullTextInputInfo uri title nm link =
         }
 
 nullTaxonomyTopic :: URIString -> URIString -> TaxonomyTopic
-nullTaxonomyTopic uri link = 
+nullTaxonomyTopic uri link =
   TaxonomyTopic
         { taxonomyURI    = uri
         , taxonomyLink   = link
